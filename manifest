@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+repository=aws
+parent=deploy
+variants=()
+namespace=cimg
