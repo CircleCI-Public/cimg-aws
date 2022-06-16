@@ -4,7 +4,7 @@
 		<img alt="Docker Logo" src="https://raw.github.com/CircleCI-Public/cimg-aws/main/img/circle-docker.svg?sanitize=true" width="75" />
 		<img alt="AWS Logo" src="https://raw.github.com/CircleCI-Public/cimg-aws/main/img/circle-aws.svg?sanitize=true" width="75" />
 	</p>
-	<h1>CircleCI Convenience Images => Deploy</h1>
+	<h1>CircleCI Convenience Images => AWS</h1>
 	<h3>A Continuous Delivery & Deployment focused Docker image built to run on CircleCI</h3>
 </div>
 
@@ -13,7 +13,8 @@
 **_This image is in beta. How it works and what it contains may change in a breaking fashion until it stabilizes and goes GA_**
 
 `cimg/aws` is a Docker image created by CircleCI with continuous delivery and deployment pipelines in mind.
-Each tag is a date-based snapshot of many deployment related tools such as `kubectl`, `teraform`, and much more.
+It contains the AWS CLI, related tools, and is based on the [cimg/deploy](https://github.com/CircleCI-Public/cimg-deploy) image.
+Each tag is a date-based snapshot.
 
 
 ## Table of Contents
@@ -41,8 +42,8 @@ jobs:
       - run: echo "Do things"
 ```
 
-In the above example, the CircleCI Deploy Docker image is used for the primary container.
-More specifically, the tag `2022.06.1` is used meaning this is the 1st April 2022 snapshot.
+In the above example, the CircleCI AWS Docker image is used for the primary container.
+More specifically, the tag `2022.06.1` is used meaning this is the 1st June 2022 snapshot.
 You can now use all of the tools pre-installed in this image in this job.
 
 
@@ -57,32 +58,19 @@ Variant images typically contain the same base software, but with a few addition
 
 #### Node.js
 
-The Node.js variant is the same Deploy image but with Node.js also installed.
-The Node.js variant will be used by appending `-node` to the end of an existing `cimg/aws` tag.
-
-```yaml
-jobs:
-  build:
-    docker:
-      - image: cimg/aws:2022.06.1-node
-    steps:
-      - checkout
-      - run: node --version
-```
+This image does not have a `node` variant.
+It's based on the node variant of the deploy image which means Node.js is already pre-installed.
 
 ### Tagging Scheme
 
 This image has the following tagging scheme:
 
 ```
-cimg/aws:YYYY.MM.I[-variant]
+cimg/aws:YYYY.MM.I
 ```
 
 The tag will be `YYYY.MM.I` where YYYY is the 4 digit year, MM is the 2 digit month, and I is the nth release of that month.
 The last piece there typically will only change when we need to patch an image for that month.
-
-`[-variant]` - Variant tags, if available, can optionally be used.
-For example the Node.js variant is available, it can be used like this: `cimg/aws:2022.06.1-node`.
 
 ## Development
 
@@ -132,8 +120,8 @@ To build this image locally and try it out, you can run the following:
 
 ```bash
 cd 2022.04
-docker build -t test/deploy:2022.06.1 .
-docker run -it test/deploy:2022.06.1 bash
+docker build -t test/aws:2022.06.1 .
+docker run -it test/aws:2022.06.1 bash
 ```
 
 ### Building the Dockerfiles
@@ -184,21 +172,21 @@ git add shared
 git commit -m "Updating submodule for foo."
 ```
 
-**parent image** - By design, when changes happen to a parent image, they don't appear in existing Deploy images.
+**parent image** - By design, when changes happen to a parent image, they don't appear in existing AWS images.
 This is to aid in "determinism" and prevent breaking customer builds.
-New Deploy images will automatically pick up the changes.
+New AWS images will automatically pick up the changes.
 
-If you _really_ want to publish changes from a parent image into the Deploy image, you have to build a specific image version as if it was a new image.
+If you _really_ want to publish changes from a parent image into the AWS image, you have to build a specific image version as if it was a new image.
 This will create a new Dockerfile and once published, a new image.
 
-**Deploy image specific changes** - Editing the `Dockerfile.template` file in this repo will modify the Deploy image specifically.
+**AWS image specific changes** - Editing the `Dockerfile.template` file in this repo will modify the AWS image specifically.
 Don't forget that to see any of these changes locally, the `gen-dockerfiles.sh` script will need to be run again (see above).
 
 ## Contributing
 
 We encourage [issues](https://github.com/CircleCI-Public/cimg-aws/issues) and [pull requests](https://github.com/CircleCI-Public/cimg-aws/pulls) against this repository. In order to value your time, here are some things to consider:
 
-1. We won't include just anything in this image. In order for us to add a tool within the Deploy image, it has to be something that is maintained and useful to a large number of CircleCI users. Every tool added makes the image larger and slower for all users so being thorough on what goes in the image will benefit everyone.
+1. We won't include just anything in this image. In order for us to add a tool within the AWS image, it has to be something that is maintained and useful to a large number of CircleCI users. Every tool added makes the image larger and slower for all users so being thorough on what goes in the image will benefit everyone.
 1. PRs are welcome. If you have a PR that will potentially take a large amount of time to make, it will be better to open an issue to discuss it first to make sure it's something worth investing the time in.
 1. Issues should be used to report bugs or request additional/removal of tools in this image. For help with images, please visit [CircleCI Discuss](https://discuss.circleci.com/c/ecosystem/circleci-images).
 
