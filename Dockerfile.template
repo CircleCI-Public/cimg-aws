@@ -11,7 +11,8 @@ RUN sudo apt-get update && sudo apt-get install --yes --no-install-recommends \
 		amazon-ecr-credential-helper \
 	&& \
 	sudo rm -rf /var/lib/apt/lists/* && \
-	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+	[[ $(uname -m) == "x86_64" ]] && ARCH="x86_64" || ARCH="aarch64" && \
+	curl "https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}.zip" -o "awscliv2.zip" && \
 	unzip awscliv2.zip && \
 	sudo ./aws/install && \
 	rm -fR aws* && \
