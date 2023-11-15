@@ -4,7 +4,7 @@
 
 FROM %%NAMESPACE%%/%%PARENT%%:2023.09-node
 
-LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
+LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
 # Install AWS related tools
 RUN sudo apt-get update && sudo apt-get install --yes --no-install-recommends \
