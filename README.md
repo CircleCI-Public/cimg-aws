@@ -47,7 +47,6 @@ In the above example, the CircleCI AWS Docker image is used for the primary cont
 More specifically, the tag `2022.06.1` is used meaning this is the 1st June 2022 snapshot.
 You can now use all of the tools pre-installed in this image in this job.
 
-
 ## How This Image Works
 
 This image is published on a monthly basis.
